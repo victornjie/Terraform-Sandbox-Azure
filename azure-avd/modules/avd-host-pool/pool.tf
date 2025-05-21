@@ -33,7 +33,7 @@ resource "azurerm_virtual_desktop_host_pool" "pool" {
 
 resource "azurerm_virtual_desktop_host_pool_registration_info" "registration" {
   hostpool_id     = azurerm_virtual_desktop_host_pool.pool.id
-  expiration_date = "2025-04-30T23:40:52Z"
+  expiration_date = "2025-06-10T23:40:52Z"
 }
 
 
