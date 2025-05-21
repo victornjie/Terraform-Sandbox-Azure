@@ -16,3 +16,9 @@ data "azurerm_key_vault_secret" "admin_password" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   provider     = azurerm
 }
+
+data "azurerm_private_dns_zone" "sql" {
+  name                = "privatelink.mysql.database.azure.com"
+  resource_group_name = "Lab-RG"
+  provider            = azurerm
+}

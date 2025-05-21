@@ -86,3 +86,25 @@ resource "azurerm_mssql_failover_group" "failover_group" {
 
   depends_on = [module.sql_database_secondary]
 }
+
+# Create private endpoint for SQL server
+resource "azurerm_private_endpoint" "sql_db_primary_endpoint" {
+  name                = "sqldb-endpoint"
+  location            = local.location_primary
+  resource_group_name = local.rg_sql_name_primary
+  subnet_id           = data.azurerm_subnet.subnet.id
+
+  private_service_connection {
+    name                           = "sql-private-serviceconnection"
+    private_connection_resource_id = module.sql_database_primary.sql_server_id
+    subresource_names              = ["sqlServer"]
+    is_manual_connection           = false
+  }
+
+  private_dns_zone_group {
+    name                 = "sql-dns-zone-group"
+    private_dns_zone_ids = [data.azurerm_private_dns_zone.sql.id]
+  }
+
+  depends_on = [module.sql_database_primary]
+}
