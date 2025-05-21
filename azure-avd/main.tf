@@ -24,7 +24,7 @@ module "desktop_pool_vm_host" {
   vm_name            = each.key
   computer_name      = each.key
   vm_size            = each.value.vm_size
-  vm_subnet_id       = data.azurerm_subnet.subnet_user_eus2.id
+  vm_subnet_id       = data.azurerm_subnet.subnet.id
   admin_username     = local.admin_username
   admin_password     = local.admin_password
   license_type       = local.license_type
@@ -53,7 +53,7 @@ module "base_pool_vm_host" {
   vm_name            = each.key
   computer_name      = each.key
   vm_size            = each.value.vm_size
-  vm_subnet_id       = data.azurerm_subnet.subnet_user_eus2.id
+  vm_subnet_id       = data.azurerm_subnet.subnet.id
   admin_username     = local.admin_username
   admin_password     = local.admin_password
   license_type       = local.license_type
