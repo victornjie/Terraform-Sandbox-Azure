@@ -1,0 +1,131 @@
+locals {
+  # A mapping of tags to assign to the resource
+  user_defined_tags = {
+    "CostCenter"      = "5057400"
+    "Createdby"       = "Belville, Andrew"
+    "BillingAccount"  = "TUHS"
+    "Department"      = "Cloud Services"
+    "Division"        = "TUHS"
+    "Environment"     = "PRD"
+    "Team"            = "Cloud Services"
+    "ApplicationName" = "AVD"
+  }
+
+  # A mapping of values to assign to the avd_host_pool_eus2 module
+  rg_pool_name                       = "rg-hostpool-avd-prd-eus2-001"
+  location                           = "eastus2"
+  registration_token_expiration_date = "2025-06-15T23:40:52Z"
+
+  host_pool = {
+    "desktop-pool" = {
+      pool_type                        = "Pooled"
+      maximum_sessions_allowed         = 10
+      load_balancer_type               = "BreadthFirst"
+      preferred_app_group_type         = "Desktop"
+      application_group_type           = "Desktop"
+      personal_desktop_assignment_type = "Automatic"
+    },
+    "avd-base-pool" = {
+      pool_type                        = "Pooled"
+      maximum_sessions_allowed         = 10
+      load_balancer_type               = "BreadthFirst"
+      preferred_app_group_type         = "Desktop"
+      application_group_type           = "Desktop"
+      personal_desktop_assignment_type = "Automatic"
+    },
+    "ra01-gold-pool" = {
+      pool_type                        = "Pooled"
+      maximum_sessions_allowed         = 10
+      load_balancer_type               = "BreadthFirst"
+      preferred_app_group_type         = "RailApplications"
+      application_group_type           = "RemoteApp"
+      personal_desktop_assignment_type = "Automatic"
+    },
+    "ra02-gold-pool" = {
+      pool_type                        = "Pooled"
+      maximum_sessions_allowed         = 10
+      load_balancer_type               = "BreadthFirst"
+      preferred_app_group_type         = "RailApplications"
+      application_group_type           = "RemoteApp"
+      personal_desktop_assignment_type = "Automatic"
+    }
+  }
+
+  # A mapping of values to assign to the avd_vm_host module
+  rg_vm_name        = "rg-vmhost-avd-eus2-001"
+  admin_username    = "azureuser"
+  admin_password    = data.azurerm_key_vault_secret.admin_password.value
+  license_type      = "Windows_Client"
+  avd_vm_deployment = true
+
+  vm_host_01 = {
+    "EUS2AVDUSR01" = {
+      vm_size         = "Standard_D4ds_v5"
+      custom_image_id = data.azurerm_shared_image_version.win11ms.id
+      domain_name     = "tuh.tuhs.prv"
+      ou_path         = "OU=avd-test, OU=avd, OU=vdi, OU=Greenfield, DC=tuh, DC=tuhs, DC=prv"
+      domain_user_upn = "SVCAZUREAUTOMATE"
+      domain_password = data.azurerm_key_vault_secret.domain_password.value
+    }
+  }
+
+  vm_avd_base = {
+    "AVD-Base" = {
+      vm_size         = "Standard_D8s_v5"
+      custom_image_id = data.azurerm_shared_image_version.avd_base.id
+      domain_name     = "tuh.tuhs.prv"
+      ou_path         = "OU=avd-base, OU=avd, OU=vdi, OU=Greenfield, DC=tuh, DC=tuhs, DC=prv"
+      domain_user_upn = "SVCAZUREAUTOMATE"
+      domain_password = data.azurerm_key_vault_secret.domain_password.value
+    }
+  }
+
+  vm_ra01_gold = {
+    "RA01-Gold" = {
+      vm_size         = "Standard_D8s_v5"
+      custom_image_id = data.azurerm_shared_image_version.ra01.id
+      domain_name     = "tuh.tuhs.prv"
+      ou_path         = "OU=Update, OU=RemoteApps01, OU=avd, OU=vdi, OU=Greenfield, DC=tuh, DC=tuhs, DC=prv"
+      domain_user_upn = "SVCAZUREAUTOMATE"
+      domain_password = data.azurerm_key_vault_secret.domain_password.value
+    }
+  }
+
+  vm_ra02_gold = {
+    "RA02-Gold" = {
+      vm_size         = "Standard_D8s_v5"
+      custom_image_id = data.azurerm_shared_image_version.ra02.id
+      domain_name     = "tuh.tuhs.prv"
+      ou_path         = "OU=Update, OU=remoteapps02, OU=avd, OU=vdi, OU=Greenfield, DC=tuh, DC=tuhs, DC=prv"
+      domain_user_upn = "SVCAZUREAUTOMATE"
+      domain_password = data.azurerm_key_vault_secret.domain_password.value
+    }
+  }
+
+  # A mapping of values to assign to AVD RBAC role assignments
+  role_assignment = {
+    "assign_001" = {
+      scope              = module.avd_host_pool_eus2["desktop-pool"].app_group_id
+      role_definition_id = data.azurerm_role_definition.role.id
+      principal_id       = data.azuread_group.admin_group.object_id
+    },
+    "assign_002" = {
+      scope              = module.avd_host_pool_eus2["desktop-pool"].app_group_id
+      role_definition_id = data.azurerm_role_definition.role.id
+      principal_id       = data.azuread_group.owner_group.object_id
+    }
+  }
+
+
+  # A mapping of values to assign to the compute_gallery module
+  rg_gallery_name = "rg-compute-gallery-avd-prd-eus2-001"
+  gallery_name    = "tuhs_avd_compute_gallery_prd_eus2_001"
+  image_name      = "test-win11-image-eus2"
+  image_os_type   = "Windows"
+  image_publisher = "Microsoft"
+  image_offer     = "Windows-11"
+  image_sku       = "Win11-Pro"
+
+}
+
+
