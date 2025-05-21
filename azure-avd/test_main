@@ -1,0 +1,184 @@
+module "avd_host_pool_eus2" {
+  source = "./modules/avd-host-pool"
+
+  for_each = local.host_pool
+
+  rg_pool_name                     = local.rg_pool_name
+  location                         = local.location
+  pool_name                        = each.key
+  pool_type                        = each.value.pool_type
+  maximum_sessions_allowed         = each.value.maximum_sessions_allowed
+  load_balancer_type               = each.value.load_balancer_type
+  preferred_app_group_type         = each.value.preferred_app_group_type
+  application_group_type           = each.value.application_group_type
+  personal_desktop_assignment_type = each.value.personal_desktop_assignment_type
+
+  registration_token_expiration_date = local.registration_token_expiration_date
+
+  user_defined_tags = local.user_defined_tags
+}
+
+module "desktop_pool_vm_host_eus2" {
+  source = "./modules/avd-vm-host"
+
+  for_each = local.vm_host_01
+
+  rg_vm_name         = local.rg_vm_name
+  location           = local.location
+  vm_name            = each.key
+  computer_name      = each.key
+  vm_size            = each.value.vm_size
+  vm_subnet_id       = data.azurerm_subnet.subnet_user_eus2.id
+  admin_username     = local.admin_username
+  admin_password     = local.admin_password
+  license_type       = local.license_type
+  avd_vm_deployment  = local.avd_vm_deployment
+  custom_image_id    = each.value.custom_image_id
+  host_pool_name     = module.avd_host_pool_eus2["desktop-pool"].avd_pool_name
+  registration_token = module.avd_host_pool_eus2["desktop-pool"].avd_registration_token
+
+  domain_name = each.value.domain_name
+  ou_path = each.value.ou_path
+  domain_user_upn = each.value.domain_user_upn
+  domain_password = each.value.domain_password
+
+  user_defined_tags = local.user_defined_tags
+
+  depends_on = [module.avd_host_pool_eus2]
+}
+
+module "avd_base_pool_vm_host_eus2" {
+  source = "./modules/avd-vm-host"
+
+  for_each = local.vm_avd_base
+
+  rg_vm_name         = local.rg_vm_name
+  location           = local.location
+  vm_name            = each.key
+  computer_name      = each.key
+  vm_size            = each.value.vm_size
+  vm_subnet_id       = data.azurerm_subnet.subnet_user_eus2.id
+  admin_username     = local.admin_username
+  admin_password     = local.admin_password
+  license_type       = local.license_type
+  avd_vm_deployment  = local.avd_vm_deployment
+  custom_image_id    = each.value.custom_image_id
+  host_pool_name     = module.avd_host_pool_eus2["avd-base-pool"].avd_pool_name
+  registration_token = module.avd_host_pool_eus2["avd-base-pool"].avd_registration_token
+
+  domain_name = each.value.domain_name
+  ou_path = each.value.ou_path
+  domain_user_upn = each.value.domain_user_upn
+  domain_password = each.value.domain_password
+
+  user_defined_tags = local.user_defined_tags
+
+  depends_on = [module.avd_host_pool_eus2]
+}
+
+module "ra01_gold_pool_vm_host_eus2" {
+  source = "./modules/avd-vm-host"
+
+  for_each = local.vm_ra01_gold
+
+  rg_vm_name         = local.rg_vm_name
+  location           = local.location
+  vm_name            = each.key
+  computer_name      = each.key
+  vm_size            = each.value.vm_size
+  vm_subnet_id       = data.azurerm_subnet.subnet_app_eus2.id
+  admin_username     = local.admin_username
+  admin_password     = local.admin_password
+  license_type       = local.license_type
+  avd_vm_deployment  = local.avd_vm_deployment
+  custom_image_id    = each.value.custom_image_id
+  host_pool_name     = module.avd_host_pool_eus2["ra01-gold-pool"].avd_pool_name
+  registration_token = module.avd_host_pool_eus2["ra01-gold-pool"].avd_registration_token
+
+  domain_name = each.value.domain_name
+  ou_path = each.value.ou_path
+  domain_user_upn = each.value.domain_user_upn
+  domain_password = each.value.domain_password
+
+  user_defined_tags = local.user_defined_tags
+
+  depends_on = [module.avd_host_pool_eus2]
+}
+
+module "ra02_gold_pool_vm_host_eus2" {
+  source = "./modules/avd-vm-host"
+
+  for_each = local.vm_ra02_gold
+
+  rg_vm_name         = local.rg_vm_name
+  location           = local.location
+  vm_name            = each.key
+  computer_name      = each.key
+  vm_size            = each.value.vm_size
+  vm_subnet_id       = data.azurerm_subnet.subnet_app_eus2.id
+  admin_username     = local.admin_username
+  admin_password     = local.admin_password
+  license_type       = local.license_type
+  avd_vm_deployment  = local.avd_vm_deployment
+  custom_image_id    = each.value.custom_image_id
+  host_pool_name     = module.avd_host_pool_eus2["ra02-gold-pool"].avd_pool_name
+  registration_token = module.avd_host_pool_eus2["ra02-gold-pool"].avd_registration_token
+
+  domain_name = each.value.domain_name
+  ou_path = each.value.ou_path
+  domain_user_upn = each.value.domain_user_upn
+  domain_password = each.value.domain_password
+
+  user_defined_tags = local.user_defined_tags
+
+  depends_on = [module.avd_host_pool_eus2]
+}
+
+/*module "avd_vm_host_eus2" {
+  source             = "./modules/avd-vm-host"
+  count              = 3
+  rg_vm_name         = local.rg_vm_name
+  location           = local.location
+  vm_name            = "${local.vm_name}-00${count.index + 1}"
+  computer_name      = "${local.vm_name}-00${count.index + 1}"
+  vm_size            = local.vm_size
+  vm_subnet_id       = data.azurerm_subnet.subnet.id
+  admin_username     = local.admin_username
+  admin_password     = local.admin_password
+  license_type       = local.license_type
+  avd_vm_deployment  = local.avd_vm_deployment
+  os_publisher       = local.os_publisher
+  os_offer           = local.os_offer
+  os_sku             = local.os_sku
+  os_version         = local.os_version
+  host_pool_name     = module.avd_host_pool_eus2.avd_pool_name
+  registration_token = module.avd_host_pool_eus2.avd_registration_token
+
+  user_defined_tags = local.user_defined_tags
+
+  depends_on = [module.avd_host_pool_eus2]
+}*/
+
+resource "azurerm_role_assignment" "role" {
+  for_each = local.role_assignment
+
+  scope              = each.value.scope
+  role_definition_id = each.value.role_definition_id
+  principal_id       = each.value.principal_id
+}
+
+module "avd_compute_gallery" {
+  source = "./modules/azure-compute-gallery"
+
+  rg_gallery_name = local.rg_gallery_name
+  gallery_name    = local.gallery_name
+  location        = local.location
+  image_name      = local.image_name
+  image_os_type   = local.image_os_type
+  image_publisher = local.image_publisher
+  image_offer     = local.image_offer
+  image_sku       = local.image_sku
+
+  user_defined_tags = local.user_defined_tags
+
+}
