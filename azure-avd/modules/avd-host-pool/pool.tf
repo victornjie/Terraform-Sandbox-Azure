@@ -1,14 +1,6 @@
-resource "azurerm_resource_group" "rg_pool" {
-  name     = var.rg_pool_name
-  location = var.location
-
-  tags = var.user_defined_tags
-}
-
-
 resource "azurerm_virtual_desktop_host_pool" "pool" {
-  location            = azurerm_resource_group.rg_pool.location
-  resource_group_name = azurerm_resource_group.rg_pool.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
   name                     = var.pool_name
   friendly_name            = var.pool_name
@@ -39,8 +31,8 @@ resource "azurerm_virtual_desktop_host_pool_registration_info" "registration" {
 
 resource "azurerm_virtual_desktop_application_group" "desktop" {
   name                = "desktop-app-group"
-  location            = azurerm_resource_group.rg_pool.location
-  resource_group_name = azurerm_resource_group.rg_pool.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
   type          = "Desktop"
   host_pool_id  = azurerm_virtual_desktop_host_pool.pool.id
@@ -51,8 +43,8 @@ resource "azurerm_virtual_desktop_application_group" "desktop" {
 
 resource "azurerm_virtual_desktop_workspace" "workspace" {
   name                = "workspace"
-  location            = azurerm_resource_group.rg_pool.location
-  resource_group_name = azurerm_resource_group.rg_pool.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
   friendly_name = "workspace"
   description   = "Azure Virtual Desktop workspace"

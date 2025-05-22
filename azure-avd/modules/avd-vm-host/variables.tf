@@ -1,11 +1,11 @@
-variable "rg_vm_name" {
+variable "resource_group_name" {
   type        = string
-  description = "The name of the resource group in which to create the Virtual Machine"
+  description = "The name of the resource group in which to create the resources"
 }
 
 variable "location" {
   type        = string
-  description = "The Azure Region where the Resource Group should exist"
+  description = "The Azure Region where the resources should exist"
   default     = "eastus2"
 
   validation {
@@ -113,9 +113,4 @@ variable "license_type" {
 variable "avd_vm_deployment" {
   type        = bool
   description = "Specifies if this VM deployment is part of an AVD Pool"
-}
-
-variable "user_defined_tags" {
-  type        = map(string)
-  description = "A mapping of tags to assign to the resource"
 }

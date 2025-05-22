@@ -1,14 +1,8 @@
-resource "azurerm_resource_group" "rg_vm" {
-  name     = var.rg_vm_name
-  location = var.location
-
-  tags = var.user_defined_tags
-}
 
 resource "azurerm_network_interface" "nic" {
   name                = "nic-${lower(var.vm_name)}-01"
-  location            = azurerm_resource_group.rg_vm.location
-  resource_group_name = azurerm_resource_group.rg_vm.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
   accelerated_networking_enabled = true
 
@@ -22,8 +16,8 @@ resource "azurerm_network_interface" "nic" {
 resource "azurerm_windows_virtual_machine" "vm" {
   name                = var.vm_name
   computer_name       = var.computer_name
-  resource_group_name = azurerm_resource_group.rg_vm.name
-  location            = azurerm_resource_group.rg_vm.location
+  resource_group_name = var.resource_group_name
+  location            = var.location
   size                = var.vm_size
   admin_username      = var.admin_username
   admin_password      = var.admin_password

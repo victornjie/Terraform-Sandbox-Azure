@@ -7,24 +7,19 @@ locals {
   }
 
   # A mapping of values to assign to the avd_host_pool module
-  rg_pool_name = "rg-avd-host-pool-eus2"
-  location     = "eastus2"
+  //rg_pool_name = "rg-avd-host-pool-eus2"
+  //location     = "eastus2"
 
   host_pool = {
-    "desktop_pool" = {
+    "desktop-pool" = {
       pool_type                = "Pooled"
       pool_name                = "desktop-pool"
       maximum_sessions_allowed = 5
-    },
-    "base_pool" = {
-      pool_type                = "Pooled"
-      pool_name                = "base-pool"
-      maximum_sessions_allowed = 10
     }
   }
 
   # A mapping of values to assign to the avd_vm_host module
-  rg_vm_name = "rg-avd-vm-host-eus2"
+  //rg_vm_name = "rg-avd-vm-host-eus2"
   //vm_size           = "Standard_D2s_v3"
   //vm_name           = "vm-host"
   admin_username    = "PSGAdmin"
@@ -36,22 +31,22 @@ locals {
   os_sku            = "win11-23h2-pro"
   os_version        = "latest"
 
-  desktop_pool_vm_host = {
+  desktop_vm_host = {
     "desktop-host" = {
       vm_size = "Standard_D2s_v3"
-      count   = 3
+      vm_count   = 3
     }
   }
 
-  base_pool_vm_host = {
+  base_vm_host = {
     "base-host" = {
       vm_size = "Standard_D2s_v3"
-      count   = 2
+      vm_count   = 2
     }
   }
 
   # A mapping of values to assign to the compute_gallery module
-  rg_gallery_name = "rg-compute-gallery-eus2"
+  //rg_gallery_name = "rg-compute-gallery-eus2"
   gallery_name    = "test_compute_gallery_eus2"
   image_name      = "test-win11-image-eus2"
   image_os_type   = "Windows"

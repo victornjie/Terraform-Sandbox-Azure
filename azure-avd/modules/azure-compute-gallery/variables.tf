@@ -1,11 +1,11 @@
-variable "rg_gallery_name" {
+variable "resource_group_name" {
   type        = string
-  description = "The name of the resource group in which to create the Shared Image Gallery"
+  description = "The name of the resource group in which to create the resources"
 }
 
 variable "location" {
   type        = string
-  description = "The Azure Region where the Resource Group should exist"
+  description = "The Azure Region where the resources should exist"
   default     = "eastus2"
 
   validation {
@@ -48,9 +48,4 @@ variable "image_offer" {
 variable "image_sku" {
   type        = string
   description = "The Name of the SKU for this Gallery Image"
-}
-
-variable "user_defined_tags" {
-  type        = map(string)
-  description = "A mapping of tags to assign to the resource"
 }
