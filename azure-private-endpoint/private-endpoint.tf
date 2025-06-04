@@ -1,18 +1,18 @@
 resource "azurerm_private_endpoint" "endpoint" {
-  name                = var.endpoint_endpoint
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  subnet_id           = azurerm_subnet.example.id
+  name                = var.endpoint_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  subnet_id           = var.subnet_id
 
   private_service_connection {
-    name                           = var.private_link_name
-    private_connection_resource_id = azurerm_storage_account.example.id
+    name                           = var.service_name
+    private_connection_resource_id = var.private_connection_resource_id
     subresource_names              = var.subresource_name
     is_manual_connection           = false
   }
 
   private_dns_zone_group {
-    name                 = "example-dns-zone-group"
-    private_dns_zone_ids = [azurerm_private_dns_zone.example.id]
+    name                 = var.dns_zone_group
+    private_dns_zone_ids = var.dns_zone_ids
   }
 }

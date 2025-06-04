@@ -35,8 +35,8 @@ module "avd_host_pool" {
 module "desktop_vm_host" {
   source = "./modules/avd-vm-host"
 
-  for_each = merge([for key, value in local.desktop_vm_host :
-    { for i in range(value.vm_count) : "${key}-${i + 1}" => key }
+  for_each = merge([for k, v in local.desktop_vm_host :
+    { for i in range(v.vm_count) : "${k}-${i + 1}" => k }
   ]...)
 
 
@@ -44,7 +44,7 @@ module "desktop_vm_host" {
   location            = azurerm_resource_group.rg_vm.location
   vm_name             = each.key
   computer_name       = each.key
-  vm_size             = local.desktop_vm_host[each.value].vm_size #local.vm_size #local.base_pool_vm_host[each.value].vm_size
+  vm_size             = local.desktop_vm_host[each.value].vm_size
   vm_subnet_id        = data.azurerm_subnet.subnet.id
   admin_username      = local.admin_username
   admin_password      = local.admin_password
@@ -76,7 +76,7 @@ module "base_vm_host" {
   location            = azurerm_resource_group.rg_vm.location
   vm_name             = each.key
   computer_name       = each.key
-  vm_size             = local.base_vm_host[each.value].vm_size #local.vm_size #local.base_pool_vm_host[each.value].vm_size
+  vm_size             = local.base_vm_host[each.value].vm_size
   vm_subnet_id        = data.azurerm_subnet.subnet.id
   admin_username      = local.admin_username
   admin_password      = local.admin_password
