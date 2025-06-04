@@ -7,12 +7,12 @@ resource "azurerm_private_endpoint" "endpoint" {
   private_service_connection {
     name                           = var.service_name
     private_connection_resource_id = var.private_connection_resource_id
-    subresource_names              = var.subresource_name
+    subresource_names              = var.subresource_names
     is_manual_connection           = false
   }
 
   private_dns_zone_group {
-    name                 = var.dns_zone_group
+    name                 = var.dns_zone_group_name
     private_dns_zone_ids = var.dns_zone_ids
   }
 }

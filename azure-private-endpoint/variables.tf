@@ -28,3 +28,23 @@ variable "service_name" {
   type        = string
   description = "Specifies the Name of the Private Service Connection"
 }
+
+variable "private_connection_resource_id" {
+  type        = string
+  description = "The ID of the Private Link Enabled Remote Resource which this Private Endpoint should be connected to"
+}
+
+variable "subresource_names" {
+  type        = list(string)
+  description = "A list of subresource names which the Private Endpoint is able to connect to"
+}
+
+variable "dns_zone_group_name" {
+  type        = string
+  description = "Specifies the Name of the Private DNS Zone Group"
+}
+
+variable "dns_zone_ids" {
+  type        = list(string)
+  description = "Specifies the list of Private DNS Zones to include within the Private DNS Zone Group"
+}
